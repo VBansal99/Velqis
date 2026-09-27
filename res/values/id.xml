@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Copyright (C) 2020 The Android Open Source Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<resources>
+    <item name="apps_list_view_work" type="id" />
+    <item name="view_type_widgets_space" type="id" />
+    <item name="view_type_widgets_list" type="id" />
+    <item name="view_type_widgets_header" type="id" />
+    <item name="view_type_widgets_list_expand" type="id" />
+
+    <!-- Accessibility actions -->
+    <item name="action_remove" type="id" />
+    <item name="action_uninstall" type="id" />
+    <item name="action_reconfigure" type="id" />
+    <item name="action_add_to_workspace" type="id" />
+    <item name="action_move" type="id" />
+    <item name="action_move_to_workspace" type="id" />
+    <item name="action_move_screen_backwards" type="id" />
+    <item name="action_move_screen_forwards" type="id" />
+    <item name="action_resize" type="id" />
+    <item name="action_deep_shortcuts" type="id" />
+    <item name="action_remote_action_shortcut" type="id" />
+    <item name="action_dismiss_prediction" type="id" />
+    <item name="action_pin_prediction" type="id" />
+    <item name="action_close" type="id" />
+    <!--  Used for A11y actions in staged split to identify each task uniquely  -->
+    <item name="action_app_info_top_left" type="id" />
+    <item name="action_app_info_bottom_right" type="id" />
+    <item name="action_digital_wellbeing_top_left" type="id" />
+    <item name="action_digital_wellbeing_bottom_right" type="id" />
+
+    <!-- QSB IDs. DO not change -->
+    <item name="search_container_workspace" type="id" />
+    <item name="search_container_all_apps" type="id" />
+    <item name="search_container_hotseat" type="id" />
+
+    <!-- View ID to use for QSB widget -->
+    <item name="qsb_widget" type="id" />
+
+    <!-- View ID used by cell layout to jail its content -->
+    <item name="cell_layout_jail_id" type="id" />
+
+    <!-- View IDs to store item highlight information -->
+    <item name="view_unhighlight_background" type="id" />
+
+    <!-- view ID used to restore work tab state -->
+    <item name="work_tab_state_id" type="id" />
+
+    <!-- Menu id for feature flags -->
+    <item name="menu_apply_flags" type="id" />
+
+    <!--  Do not change, must be kept in sync with sysui navbar button IDs for tests!  -->
+    <item name="home" type="id" />
+    <item name="recent_apps" type="id" />
+    <item name="back" type="id" />
+    <item name="close" type="id" />
+    <item name="ime_switcher" type="id" />
+    <item name="accessibility_button" type="id" />
+    <item name="rotate_suggestion" type="id" />
+    <item name="space" type="id" />
+    <!--  /Do not change, must be kept in sync with sysui navbar button IDs for tests!  -->
+
+    <item name="quick_settings_button" type="id" />
+    <item name="notifications_button" type="id" />
+    <item name="cache_entry_tag_id" type="id" />
+
+    <item name="saved_clip_children_tag_id" type="id" />
+    <item name="saved_clip_to_padding_tag_id" type="id" />
+
+    <item name="saved_floating_widget_foreground" type="id" />
+    <item name="saved_floating_widget_background" type="id" />
+
+    <item name="dismiss_view" type="id" />
+
+    <!-- Private Space parameters -->
+    <item name="ps_container_header" type="id" />
+    <item name="ps_lock_unlock_button" type="id" />
+    <item name="ps_settings_button" type="id" />
+    <item name="ps_transition_image" type="id" />
+
+    <!-- Recents -->
+    <item name="overview_panel" type="id" />
+
+    <!-- DragController -->
+    <item name="drag_event_parity" type="id" />
+
+    <!-- View tag key used to store SpringAnimation data. -->
+    <item name="spring_animation_tag" type="id" />
+
+</resources>

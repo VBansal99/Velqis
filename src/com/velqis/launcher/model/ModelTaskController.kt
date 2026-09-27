@@ -1,0 +1,116 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.velqis.launcher.model
+
+import com.velqis.launcher.LauncherAppState
+import com.velqis.launcher.LauncherModel
+import com.velqis.launcher.LauncherModel.CallbackTask
+import com.velqis.launcher.celllayout.CellPosMapper
+import com.velqis.launcher.model.BgDataModel.FixedContainerItems
+import com.velqis.launcher.model.data.ItemInfo
+import com.velqis.launcher.model.data.WorkspaceItemInfo
+import com.velqis.launcher.util.PackageUserKey
+import com.velqis.launcher.widget.model.WidgetsListBaseEntriesBuilder
+import java.util.Objects
+import java.util.concurrent.Executor
+import java.util.function.Predicate
+
+/** Class with utility methods and properties for running a LauncherModel Task */
+class ModelTaskController(
+    val app: LauncherAppState,
+    val dataModel: BgDataModel,
+    val allAppsList: AllAppsList,
+    private val model: LauncherModel,
+    private val uiExecutor: Executor,
+) {
+
+    /** Schedules a {@param task} to be executed on the current callbacks. */
+    fun scheduleCallbackTask(task: CallbackTask) {
+        for (cb in model.callbacks) {
+            uiExecutor.execute { task.execute(cb) }
+        }
+    }
+
+    /**
+     * Updates from model task, do not deal with icon position in hotseat. Also no need to verify
+     * changes as the ModelTasks always push the changes to callbacks
+     */
+    fun getModelWriter() = model.getWriter(false /* verifyChanges */, CellPosMapper.DEFAULT, null)
+
+    fun bindUpdatedWorkspaceItems(allUpdates: List<WorkspaceItemInfo>) {
+        // Bind workspace items
+        val workspaceUpdates =
+            allUpdates.stream().filter { info -> info.id != ItemInfo.NO_ID }.toList()
+        if (workspaceUpdates.isNotEmpty()) {
+            scheduleCallbackTask { it.bindWorkspaceItemsChanged(workspaceUpdates) }
+        }
+
+        // Bind extra items if any
+        allUpdates
+            .stream()
+            .mapToInt { info: WorkspaceItemInfo -> info.container }
+            .distinct()
+            .mapToObj { dataModel.extraItems.get(it) }
+            .filter { Objects.nonNull(it) }
+            .forEach { bindExtraContainerItems(it) }
+    }
+
+    fun bindExtraContainerItems(item: FixedContainerItems) {
+        scheduleCallbackTask { it.bindExtraContainerItems(item) }
+    }
+
+    fun bindDeepShortcuts(dataModel: BgDataModel) {
+        val shortcutMapCopy = HashMap(dataModel.deepShortcutMap)
+        scheduleCallbackTask { it.bindDeepShortcutMap(shortcutMapCopy) }
+    }
+
+    fun bindUpdatedWidgets(dataModel: BgDataModel) {
+        val widgetsByPackageItem = dataModel.widgetsModel.widgetsByPackageItem
+        val allWidgets = WidgetsListBaseEntriesBuilder(app.context).build(widgetsByPackageItem)
+
+        val defaultWidgetsFilter = dataModel.widgetsModel.defaultWidgetsFilter
+        val defaultWidgets =
+            if (defaultWidgetsFilter != null) {
+                WidgetsListBaseEntriesBuilder(app.context)
+                    .build(widgetsByPackageItem, defaultWidgetsFilter)
+            } else {
+                emptyList()
+            }
+
+        scheduleCallbackTask { it.bindAllWidgets(allWidgets, defaultWidgets) }
+    }
+
+    fun deleteAndBindComponentsRemoved(matcher: Predicate<ItemInfo?>, reason: String?) {
+        getModelWriter().deleteItemsFromDatabase(matcher, reason)
+
+        // Call the components-removed callback
+        scheduleCallbackTask { it.bindWorkspaceComponentsRemoved(matcher) }
+    }
+
+    fun bindApplicationsIfNeeded() {
+        if (allAppsList.getAndResetChangeFlag()) {
+            val apps = allAppsList.copyData()
+            val flags = allAppsList.flags
+            val packageUserKeyToUidMap =
+                apps.associateBy(
+                    keySelector = { PackageUserKey(it.componentName!!.packageName, it.user) },
+                    valueTransform = { it.uid },
+                )
+            scheduleCallbackTask { it.bindAllApplications(apps, flags, packageUserKeyToUidMap) }
+        }
+    }
+}

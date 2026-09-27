@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2017 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.velqis.launcher.widget.WidgetCellPreview
+        android:id="@+id/widget_preview_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="8dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:hapticFeedbackEnabled="false"
+        android:importantForAccessibility="noHideDescendants">
+        <!-- The image of the widget. This view does not support padding. Any placement adjustment
+             should be done using margins. Width & height are set at runtime after scaling the
+             preview image. -->
+        <com.velqis.launcher.widget.WidgetImageView
+            android:id="@+id/widget_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"
+            android:importantForAccessibility="no" />
+    </com.velqis.launcher.widget.WidgetCellPreview>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/widget_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <!-- The name of the widget. -->
+            <TextView
+                android:id="@+id/widget_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:drawablePadding="@dimen/widget_cell_app_icon_padding"
+                android:ellipsize="end"
+                android:fadingEdge="horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:lineHeight="@dimen/widget_cell_title_line_height"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="?attr/widgetCellTitleColor"
+                android:textFontWeight="@integer/widget_cell_title_font_weight"
+                android:textSize="@dimen/widget_cell_title_font_size" />
+
+            <!-- The original dimensions of the widget -->
+            <TextView
+                android:id="@+id/widget_dims"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:lineHeight="@dimen/widget_cell_dims_line_height"
+                android:textColor="?attr/widgetCellSubtitleColor"
+                android:textFontWeight="@integer/widget_cell_dims_font_weight"
+                android:textSize="@dimen/widget_cell_dims_font_size" />
+
+            <TextView
+                android:id="@+id/widget_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fadingEdge="horizontal"
+                android:gravity="center_horizontal"
+                android:lineHeight="@dimen/widget_cell_description_line_height"
+                android:maxLines="3"
+                android:textColor="?attr/widgetCellSubtitleColor"
+                android:textFontWeight="@integer/widget_cell_description_font_weight"
+                android:textSize="@dimen/widget_cell_description_font_size" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/widget_add_button"
+            style="@style/Button.Rounded.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/widget_cell_add_button_height"
+            android:layout_gravity="center"
+            android:background="@drawable/widget_cell_add_button_background"
+            android:drawableStart="@drawable/ic_plus"
+            android:drawablePadding="@dimen/widget_cell_add_button_drawable_padding"
+            android:drawableTint="?attr/widgetPickerAddButtonTextColor"
+            android:fontWeight="@integer/widget_cell_add_button_font_weight"
+            android:gravity="center"
+            android:lineHeight="@dimen/widget_cell_add_button_line_height"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:paddingStart="@dimen/widget_cell_add_button_start_padding"
+            android:paddingEnd="@dimen/widget_cell_add_button_end_padding"
+            android:text="@string/widget_add_button_label"
+            android:textColor="?attr/widgetPickerAddButtonTextColor"
+            android:textSize="@dimen/widget_cell_add_button_font_size"
+            android:visibility="gone" />
+    </FrameLayout>
+</merge>

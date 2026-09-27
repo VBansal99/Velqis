@@ -1,0 +1,95 @@
+package: "com.android.systemui.shared"
+container: "system"
+
+flag {
+    name: "example_shared_flag"
+    namespace: "systemui"
+    description: "An Example Flag"
+    bug: "308482106"
+}
+
+flag {
+    name: "return_animation_framework_library"
+    namespace: "systemui"
+    description: "Turn on Return functionality in the Animation library"
+    bug: "273205603"
+}
+
+flag {
+    name: "return_animation_framework_long_lived"
+    namespace: "systemui"
+    description: "Turn on long-lived Return registrations in the Animation library"
+    bug: "273205603"
+}
+
+flag {
+    name: "shade_allow_back_gesture"
+    namespace: "systemui"
+    description: "Allow Back Gestures in Shade"
+    bug: "309545085"
+}
+
+flag {
+    name: "enable_home_delay"
+    namespace: "systemui"
+    description: "Enables fix that exposes signal to notify the completion of the RRO loading."
+    bug: "307507412"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+    name: "bouncer_area_exclusion"
+    namespace : "systemui"
+    description : "Exclusion List to calculated a default bouncer region on dream"
+    bug : "327003425"
+    metadata {
+        purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
+  name: "new_touchpad_gestures_tutorial"
+  namespace: "systemui"
+  description: "Enables new interactive tutorial for learning touchpad gestures"
+  bug: "309928033"
+}
+
+flag {
+    name: "three_button_corner_swipe"
+    namespace: "systemui"
+    description: "Allow the Assistant corner swipe gesture while in 3 button mode"
+    bug: "361651619"
+}
+
+flag {
+    name: "new_customization_picker_ui"
+    namespace: "systemui"
+    description: "Enables the new design of the customization picker UI."
+    bug: "339081035"
+}
+
+flag {
+    name: "ambient_aod"
+    namespace: "systemui"
+    description: "Enables ambient wallpaper and AOD enhancements"
+    bug: "372655702"
+}
+
+flag {
+    name: "enable_launcher_icon_shapes"
+    namespace: "systemui"
+    description: "Enables launcher icon shapes customization"
+    bug: "348708061"
+}
+
+flag {
+    name: "smartspace_sports_card_background"
+    namespace: "systemui"
+    description: "Enables Smartspace sports card background protection and related ui updates"
+    bug: "380285747"
+    metadata {
+         purpose: PURPOSE_BUGFIX
+    }
+}

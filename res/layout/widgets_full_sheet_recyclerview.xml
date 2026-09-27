@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2021 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:launcher="http://schemas.android.com/apk/res-auto">
+
+    <com.velqis.launcher.widget.picker.WidgetsRecyclerView
+        android:id="@+id/primary_widgets_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/collapse_handle"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/widget_list_horizontal_margin" />
+
+    <!-- SearchAndRecommendationsView without the tab layout as well -->
+    <com.velqis.launcher.views.StickyHeaderLayout
+        android:id="@+id/search_and_recommendations_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/collapse_handle"
+        android:layout_marginHorizontal="@dimen/widget_list_horizontal_margin"
+        android:clipToOutline="true"
+        android:orientation="vertical"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            android:text="@string/widget_button_text"
+            android:textColor="?attr/widgetPickerTitleColor"
+            android:textSize="24sp" />
+
+        <FrameLayout
+            android:id="@+id/search_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/widgetPickerPrimarySurfaceColor"
+            android:clipToPadding="false"
+            android:elevation="0.1dp"
+            android:paddingBottom="8dp"
+            launcher:layout_sticky="true">
+
+            <include layout="@layout/widgets_search_bar" />
+        </FrameLayout>
+
+        <!-- Shown when there are recommendations to display -->
+        <LinearLayout
+            android:id="@+id/widget_recommendations_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/widgets_surface_background"
+            android:clipToOutline="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <include layout="@layout/widget_recommendations" />
+        </LinearLayout>
+    </com.velqis.launcher.views.StickyHeaderLayout>
+
+</merge>

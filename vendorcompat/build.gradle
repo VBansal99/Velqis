@@ -1,0 +1,27 @@
+// Small compat module bundling:
+//  - com.android.app.animation.* : vendored verbatim from the upstream AOSP
+//    frameworks/libs/systemui/animationlib (Apache-2.0), only the 4 pure-SDK source files.
+//  - com.android.systemui.contextualeducation.GestureType : vendored verbatim from
+//    frameworks/libs/systemui/contextualeducationlib (a single enum).
+//  - com.google.android.msdl.* : hand-written no-op stub (not published to any public Maven repo).
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace "com.android.launcher3.vendorcompat"
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 31
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core:1.13.1"
+}

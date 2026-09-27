@@ -1,0 +1,12 @@
+// Hand-written replacements for the aconfig/statsd-codegen'd classes this repo's Launcher3
+// source normally gets from the full AOSP build (com.android.launcher3.Flags and friends,
+// SysUiStatsLog). Plain Java, no Android APIs needed, so this is a plain java-library instead
+// of an android_library.
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}

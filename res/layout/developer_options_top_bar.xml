@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:showDividers="middle">
+
+    <EditText
+        android:id="@+id/filter_box"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/developer_options_filter_margins"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/rounded_action_button"
+        android:drawableStart="@drawable/ic_allapps_search"
+        android:drawablePadding="8dp"
+        android:drawableTint="?android:attr/textColorSecondary"
+        android:hint="@string/developer_options_filter_hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp" />
+</LinearLayout>

@@ -1,0 +1,27 @@
+// Vendored verbatim from upstream AOSP frameworks/libs/systemui/animationlib (Apache-2.0),
+// just the 4 pure-public-SDK source files (Interpolators/InterpolatorsAndroidX/MathUtils/
+// Animations) plus their res/. Own namespace so Animations.kt's bare "R" reference
+// (same-package, no import) resolves to this module's generated R class, matching how the
+// AOSP Soong build resolves it.
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace "com.android.app.animation"
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 31
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core:1.13.1"
+    implementation "androidx.core:core-animation:1.0.0"
+}

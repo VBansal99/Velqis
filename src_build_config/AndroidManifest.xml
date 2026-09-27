@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Standalone Gradle build manifest for this repo.
+
+  This is a hand-merge of the original AOSP AndroidManifest.xml + AndroidManifest-common.xml
+  (kept untouched, license headers intact) so a normal Gradle/AGP build has a single manifest
+  to merge. Differences from the originals, made only so this can install as a normal
+  (non-privileged, non-system) sideloaded app on an unrooted phone:
+    - package="com.android.launcher3" attribute dropped (namespace is set via Gradle instead)
+    - <uses-sdk> dropped (min/target sdk come from Gradle defaultConfig)
+    - android.permission.ROTATE_SURFACE_FLINGER / WAKEUP_SURFACE_FLINGER removed: these are
+      signature-only OS permissions a sideloaded app can never be granted.
+-->
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <uses-permission android:name="android.permission.BIND_APPWIDGET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <permission
+        android:name="${applicationId}.permission.READ_SETTINGS"
+        android:protectionLevel="signature"
+        android:label="@string/permlab_read_settings"
+        android:description="@string/permdesc_read_settings"/>
+    <permission
+        android:name="${applicationId}.permission.WRITE_SETTINGS"
+        android:protectionLevel="signature"
+        android:label="@string/permlab_write_settings"
+        android:description="@string/permdesc_write_settings"/>
+
+    <uses-permission android:name="${applicationId}.permission.READ_SETTINGS" />
+    <uses-permission android:name="${applicationId}.permission.WRITE_SETTINGS" />
+
+    <application
+        android:name="com.velqis.launcher.LauncherApplication"
+        android:backupAgent="com.velqis.launcher.LauncherBackupAgent"
+        android:fullBackupOnly="true"
+        android:backupInForeground="true"
+        android:fullBackupContent="@xml/backupscheme"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher_home"
+        android:label="@string/derived_app_name"
+        android:theme="@style/AppTheme"
+        android:largeHeap="@bool/config_largeHeap"
+        android:restoreAnyVersion="true"
+        android:supportsRtl="true" >
+
+        <activity
+            android:name="com.velqis.launcher.Launcher"
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="true"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="unspecified"
+            android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:resizeableActivity="true"
+            android:resumeWhilePausing="true"
+            android:taskAffinity=""
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SHOW_WORK_APPS" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.LAUNCHER_APP" />
+            </intent-filter>
+            <meta-data
+                android:name="com.velqis.launcher.grid.control"
+                android:value="${packageName}.grid_control" />
+        </activity>
+
+        <receiver
+            android:name="com.velqis.launcher.SessionCommitReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.pm.action.SESSION_COMMITTED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.velqis.launcher.AppWidgetsRestoredReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_HOST_RESTORED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.velqis.launcher.notification.NotificationListener"
+            android:label="@string/notification_dots_service_title"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <meta-data android:name="android.nfc.disable_beam_default"
+                       android:value="true" />
+
+        <activity android:name="com.velqis.launcher.dragndrop.AddItemActivity"
+            android:theme="@style/AddItemActivityTheme"
+            android:excludeFromRecents="true"
+            android:autoRemoveFromRecents="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.pm.action.CONFIRM_PIN_SHORTCUT" />
+                <action android:name="android.content.pm.action.CONFIRM_PIN_APPWIDGET" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="com.velqis.launcher.LauncherProvider"
+            android:authorities="${applicationId}.settings"
+            android:exported="true"
+            android:writePermission="${applicationId}.permission.WRITE_SETTINGS"
+            android:readPermission="${applicationId}.permission.READ_SETTINGS" />
+
+        <provider
+            android:name="com.velqis.launcher.graphics.GridCustomizationsProvider"
+            android:authorities="${applicationId}.grid_control"
+            android:exported="true" />
+
+        <activity
+            android:name="com.velqis.launcher.settings.SettingsActivity"
+            android:label="@string/settings_button_text"
+            android:theme="@style/HomeSettings.Theme"
+            android:exported="true"
+            android:autoRemoveFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="com.velqis.launcher.testing.TestInformationProvider"
+            android:authorities="${applicationId}.TestInfo"
+            android:readPermission="android.permission.WRITE_SECURE_SETTINGS"
+            android:writePermission="android.permission.WRITE_SECURE_SETTINGS"
+            android:exported="true"
+            android:enabled="false" />
+
+        <activity
+            android:name="com.velqis.launcher.secondarydisplay.SecondaryDisplayLauncher"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SECONDARY_HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove" />
+
+        <property
+            android:name="android.window.PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED"
+            android:value="true" />
+    </application>
+</manifest>

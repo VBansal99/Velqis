@@ -1,0 +1,118 @@
+// Standalone Gradle build for this AOSP Launcher3 checkout.
+//
+// This repo normally builds via Android.bp/Soong inside a full AOSP source tree, as a
+// privileged system app. This file (plus settings.gradle, flags-stub/, vendorcompat/ and
+// external/systemui-libs/iconloaderlib/) makes it buildable standalone with the Android
+// Gradle Plugin, producing a normal (non-privileged) APK installable on any unrooted phone.
+//
+// It builds the same source Android.bp uses for its non-privileged-API "Launcher3" app
+// module: src/ + src_no_quickstep/ + src_plugins/ (NOT quickstep/ or go/, which need
+// platform_apis/system privileges and are out of scope here).
+plugins {
+    id 'com.android.application'
+    id 'com.google.protobuf' version '0.10.0'
+    id 'com.google.devtools.ksp' version '2.2.10-2.0.2'
+}
+
+android {
+    namespace "com.velqis.launcher"
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.velqis.launcher"
+        minSdk 31
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        debug {
+            resValue "string", "app_name", "Velqis"
+            resValue "string", "derived_app_name", "Velqis"
+        }
+        release {
+            resValue "string", "app_name", "Velqis"
+            resValue "string", "derived_app_name", "Velqis"
+            minifyEnabled false
+        }
+    }
+
+    buildFeatures {
+        buildConfig = false
+        resValues = true
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src_build_config/AndroidManifest.xml'
+            java.srcDirs = ['src', 'src_no_quickstep', 'src_plugins', 'src_build_config', 'tests/multivalentTests/shared']
+            kotlin.srcDirs = ['src', 'src_no_quickstep', 'src_plugins', 'src_build_config', 'tests/multivalentTests/shared']
+            res.srcDirs = ['res']
+            proto {
+                srcDirs = ['protos', 'protos_overrides']
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/*.version', 'META-INF/LICENSE*', 'META-INF/NOTICE*']
+        }
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.3"
+    }
+    generateProtoTasks {
+        all().configureEach {
+            builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':flags-stub')
+    implementation project(':iconloaderlib')
+    implementation project(':vendorcompat')
+    implementation project(':animationlib')
+
+    implementation "com.google.protobuf:protobuf-javalite:3.25.3"
+
+    implementation "androidx.core:core:1.13.1"
+    implementation "androidx.core:core-ktx:1.13.1"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation "androidx.fragment:fragment-ktx:1.8.4"
+    implementation "androidx.preference:preference-ktx:1.2.1"
+    implementation "androidx.slice:slice-view:1.1.0-alpha02"
+    implementation "androidx.slice:slice-core:1.1.0-alpha02"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.window:window:1.3.0"
+    implementation "com.google.android.material:material:1.12.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.8.6"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.6"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
+
+    implementation "com.google.dagger:dagger:2.52"
+    ksp "com.google.dagger:dagger-compiler:2.52"
+    implementation "javax.inject:javax.inject:1"
+}
