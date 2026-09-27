@@ -266,7 +266,7 @@ public class FloatingHeaderView extends LinearLayout implements
                 rvType == AdapterHolder.MAIN ? mMainRV
                 : rvType == AdapterHolder.WORK ? mWorkRV : mSearchRV;
         mCurrentRV.addOnScrollListener(mOnScrollListener);
-        maybeSetTabVisibility(rvType == AdapterHolder.SEARCH ? GONE : VISIBLE);
+        maybeSetTabVisibility(rvType == AdapterHolder.SEARCH ? GONE : GONE);
     }
 
     /** Update tab visibility to the given state, only if tabs are active (work profile exists). */
