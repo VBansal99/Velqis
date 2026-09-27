@@ -31,6 +31,9 @@ import android.net.Uri;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.ArrayMap;
+import android.content.pm.LauncherApps;
+import android.content.pm.LauncherUserInfo;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,16 +99,41 @@ public class ApiWrapper {
 
                 // Simple check to check if the provided user is work profile
                 // TODO: Migrate to a better platform API
-                NoopDrawable d = new NoopDrawable();
-                boolean isWork = (d != mContext.getPackageManager().getUserBadgedIcon(d, user));
-                UserIconInfo info = new UserIconInfo(
-                        user,
-                        isWork ? UserIconInfo.TYPE_WORK : UserIconInfo.TYPE_MAIN,
-                        serial);
+//                NoopDrawable d = new NoopDrawable();
+//                boolean isWork = (d != mContext.getPackageManager().getUserBadgedIcon(d, user));
+//                UserIconInfo info = new UserIconInfo(
+//                        user,
+//                        isWork ? UserIconInfo.TYPE_WORK : UserIconInfo.TYPE_MAIN,
+//                        serial);
+                UserIconInfo info =new UserIconInfo(user,getUserIconType(user),serial);
                 users.put(user, info);
             }
         }
         return users;
+    }
+
+    @UserIconInfo.UserType
+    private int getUserIconType(UserHandle user) {
+        if (user.equals(android.os.Process.myUserHandle())) {
+            return UserIconInfo.TYPE_MAIN;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            LauncherApps launcherApps = mContext.getSystemService(LauncherApps.class);
+            LauncherUserInfo launcherUserInfo = launcherApps.getLauncherUserInfo(user);
+            String userType = launcherUserInfo == null ? null :launcherUserInfo.getUserType();
+            if (UserManager.USER_TYPE_PROFILE_MANAGED.equals(userType)) {
+                return UserIconInfo.TYPE_WORK;
+            } else if (UserManager.USER_TYPE_PROFILE_PRIVATE.equals(userType)) {
+                return UserIconInfo.TYPE_PRIVATE;
+            } else if (UserManager.USER_TYPE_PROFILE_CLONE.equals(userType)) {
+                return UserIconInfo.TYPE_CLONED;
+            } else if (userType!=null) {
+
+            }
+        }
+        NoopDrawable d= new NoopDrawable();
+        boolean isWork = (d!=mContext.getPackageManager().getUserBadgedIcon(d,user));
+        return isWork ? UserIconInfo.TYPE_WORK : UserIconInfo.TYPE_MAIN;
     }
 
     /**
