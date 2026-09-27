@@ -66,6 +66,7 @@ import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.velqis.launcher.DeviceProfile;
@@ -1569,6 +1570,10 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setHasFixedSize(true);
+            if (mLayoutManager instanceof LinearLayoutManager linearLayoutManager) {
+                linearLayoutManager.setInitialPrefetchItemCount(6);
+            }
+            mRecyclerView.setItemViewCacheSize(12);
             // No animations will occur when changes occur to the items in this RecyclerView.
             mRecyclerView.setItemAnimator(null);
             onInitializeRecyclerView(mRecyclerView);

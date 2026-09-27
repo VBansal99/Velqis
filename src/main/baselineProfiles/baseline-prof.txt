@@ -1,0 +1,31 @@
+# Manually-authored baseline profile for the App Drawer (All Apps) scroll path.
+#
+# This tells ART to verify/pre-optimize these classes at app install time
+# (via dex2oat), instead of waiting for them to be interpreted and JIT-compiled
+# the first time they run. Without this, the very first fling in All Apps is
+# slower than every fling after it, because the RecyclerView bind/layout/scroll
+# code for these classes is running in interpreted mode for the first time.
+#
+# This was hand-written (not generated from a Macrobenchmark trace), so it only
+# lists whole classes, not per-method hot/startup/post-startup flags.
+
+Lcom/velqis/launcher/allapps/ActivityAllAppsContainerView;
+Lcom/velqis/launcher/allapps/ActivityAllAppsContainerView$AdapterHolder;
+Lcom/velqis/launcher/allapps/BaseAllAppsAdapter;
+Lcom/velqis/launcher/allapps/BaseAllAppsAdapter$ViewHolder;
+Lcom/velqis/launcher/allapps/AllAppsGridAdapter;
+Lcom/velqis/launcher/allapps/AllAppsGridAdapter$AppsGridLayoutManager;
+Lcom/velqis/launcher/allapps/AllAppsRecyclerView;
+Lcom/velqis/launcher/allapps/AlphabeticalAppsList;
+Lcom/velqis/launcher/allapps/PrivateProfileManager;
+Lcom/velqis/launcher/allapps/WorkProfileManager;
+Lcom/velqis/launcher/BubbleTextView;
+
+Lcom/android/launcher3/icons/BitmapInfo;
+Lcom/android/launcher3/icons/FastBitmapDrawable;
+
+Landroidx/recyclerview/widget/RecyclerView;
+Landroidx/recyclerview/widget/RecyclerView$Recycler;
+Landroidx/recyclerview/widget/RecyclerView$LayoutManager;
+Landroidx/recyclerview/widget/LinearLayoutManager;
+Landroidx/recyclerview/widget/GridLayoutManager;
