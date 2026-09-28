@@ -183,7 +183,11 @@ public class AppsSearchContainerLayout extends ExtendedEditText
     @Override
     public void setInsets(Rect insets) {
         MarginLayoutParams mlp = (MarginLayoutParams) getLayoutParams();
-        mlp.topMargin = insets.top;
+        if (mLauncher.getDeviceProfile().shouldShowAllAppsOnSheet()) {
+            mlp.topMargin = 20;
+        } else {
+            mlp.topMargin = insets.top;
+        }
         requestLayout();
     }
 
