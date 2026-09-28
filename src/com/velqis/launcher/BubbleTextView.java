@@ -456,7 +456,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         setContentDescription(label);
     }
 
-    /** Updates whether the app this view represents is currently running. */
+    /**
+     * Updates whether the app this view represents is currently running.
+     */
     @UiThread
     public void updateRunningState(RunningAppState runningAppState) {
         mRunningAppState = runningAppState;
@@ -487,7 +489,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     protected boolean shouldUseTheme() {
         return (mDisplay == DISPLAY_WORKSPACE || mDisplay == DISPLAY_FOLDER
-                || mDisplay == DISPLAY_TASKBAR) && Themes.isThemedIconEnabled(getContext());
+                || mDisplay == DISPLAY_TASKBAR || mDisplay == DISPLAY_ALL_APPS || mDisplay == DISPLAY_SEARCH_RESULT
+                || mDisplay == DISPLAY_PREDICTION_ROW) && Themes.isThemedIconEnabled(getContext());
     }
 
     /**
@@ -535,7 +538,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         }
     }
 
-    /** This is used for testing to forcefully set the display. */
+    /**
+     * This is used for testing to forcefully set the display.
+     */
     @VisibleForTesting
     public void setDisplay(int display) {
         mDisplay = display;
@@ -564,7 +569,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         return drawableState;
     }
 
-    /** Returns the icon for this view. */
+    /**
+     * Returns the icon for this view.
+     */
     public FastBitmapDrawable getIcon() {
         return mIcon;
     }
@@ -672,7 +679,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
      * @see #setLetterSpacing(float)
      */
     private float findBestSpacingValue(TextPaint paint, String text, float allowedWidthPx,
-            float minSpacingEm) {
+                                       float minSpacingEm) {
         paint.setLetterSpacing(minSpacingEm);
         if (paint.measureText(text) > allowedWidthPx) {
             // If there is no result at high limit, we can do anything more
@@ -726,7 +733,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         }
     }
 
-    /** Draws a background behind the App Title label when required. **/
+    /**
+     * Draws a background behind the App Title label when required.
+     **/
     public void drawAppContrastTile(Canvas canvas) {
         RectF appTitleBounds;
         Paint.FontMetrics fm = getPaint().getFontMetrics();
@@ -760,7 +769,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
                 PillColorProvider.getInstance(getContext()).getAppTitlePillPaint());
     }
 
-    /** Draws a line under the app icon if this is representing a running app in Desktop Mode. */
+    /**
+     * Draws a line under the app icon if this is representing a running app in Desktop Mode.
+     */
     protected void drawRunningAppIndicatorIfNecessary(Canvas canvas) {
         if (mRunningAppState == RunningAppState.NOT_RUNNING || mDisplay != DISPLAY_TASKBAR) {
             return;
@@ -920,6 +931,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     /**
      * Sets text with a start icon for App Archiving.
      * Uses a bolded drawable if text is bolded.
+     *
      * @param text
      */
     private void setTextWithArchivingIcon(CharSequence text) {
@@ -934,7 +946,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     /**
      * Uses a SpannableString to set text with a Drawable at the start of the TextView
-     * @param text text to use for TextView
+     *
+     * @param text       text to use for TextView
      * @param drawableId Drawable Resource to use for drawing image at start of text
      */
     @VisibleForTesting
@@ -1033,8 +1046,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
      * "Battery\nStats"
      */
     public static CharSequence modifyTitleToSupportMultiLine(int limitedWidth, int limitedHeight,
-            CharSequence title, TextPaint paint, IntArray breakPoints, float spacingMultiplier,
-            float spacingExtra) {
+                                                             CharSequence title, TextPaint paint, IntArray breakPoints, float spacingMultiplier,
+                                                             float spacingExtra) {
         // current title is less than the width allowed so we can just skip
         if (title == null || paint.measureText(title, 0, title.length()) <= limitedWidth) {
             return title;
@@ -1096,7 +1109,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     /**
      * Applies the loading progress value to the progress bar.
-     *
+     * <p>
      * If this app is installing, the progress bar will be updated with the installation progress.
      * If this app is installed and downloading incrementally, the progress bar will be updated
      * with the total download progress.
@@ -1121,7 +1134,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         }
     }
 
-    /** Applies the given progress level to the this icon's progress bar. */
+    /**
+     * Applies the given progress level to the this icon's progress bar.
+     */
     @Nullable
     public PreloadIconDrawable applyProgressLevel() {
         if (!(getTag() instanceof ItemInfoWithIcon info)
@@ -1280,7 +1295,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         return mIsIconVisible ? mIcon : new ColorDrawable(Color.TRANSPARENT);
     }
 
-    /** Sets the icon visual state to disabled or not. */
+    /**
+     * Sets the icon visual state to disabled or not.
+     */
     public void setIconDisabled(boolean isDisabled) {
         if (mIcon != null) {
             mIcon.setIsDisabled(isDisabled);
